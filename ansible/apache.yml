@@ -1,0 +1,27 @@
+---
+- name: Configure the lab web server
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Ensure Apache is installed
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Create the lab web page
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          <h1>Azure RHEL Lab</h1><p>Web application is working.</p>
+        owner: root
+        group: root
+        mode: '0644'
+        setype: httpd_sys_content_t
+
+    - name: Ensure Apache is running and enabled at boot
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
