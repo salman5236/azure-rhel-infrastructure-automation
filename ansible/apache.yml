@@ -25,3 +25,11 @@
         name: httpd
         state: started
         enabled: true
+
+    - name: Allow HTTP through the public firewall zone
+      ansible.posix.firewalld:
+        zone: public
+        service: http
+        state: enabled
+        permanent: true
+        immediate: true
